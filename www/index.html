@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- Title of Micro App will be injected -->
+        <title>I like ObjectHub</title>
+        
+        <!-- Link to bootstrap stylesheet -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    </head>
+
+    <body>
+        
+        <!-- Display Sqlash Screen -->
+        <div data-role='splash' style='text-align: center;'>
+            123
+            <img src='https://objecthub.io/hub/users/main/~objecthub/home/my/~*0/it/.n/Platform/.n/Import/~*0/.n/ObjectHub_Web/.n/Basic_Editors/.n/Micro_App/.n/Deploy/.n/Loading_Indicator/data/img/data.dat'>
+        </div>
+        
+        <!-- Embed Micro App here -->
+        <div data-role='embed-app' style='display: none;'>
+
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" ></script> 
+		
+        <!-- Stellar DB and ObjectHub client libraries - DO NOT REMOVE -->
+        <script src='https://objecthub.io/js/v01/stellardb/stellardb.nocache.js'></script> 
+		
+        <!-- ObjectHub JavaScript Framework - DO NOT REMOVE -->
+        <script src='https://objecthub.io/hub/users/main/~objecthub/home/my/~*0/it/.n/Platform/.n/Import/~*0/.n/ObjectHub_Web/.n/Foundation/.n/ObjectHub_Core_V1_0.js'></script>
+        
+        <!-- Link to compiled bundle will be injected -->
+        <script src='bundle.js'></script>
+        <script>
+            // Callback to be called when client libraries are loaded
+            window.onEngine = function() {
+                // loading of compiled bundle if available
+                if (window.Bundles) {
+                	window.Bundles.load();
+                }
+                
+                // creating an embedded server (used for testing)
+                var server = Servers.createAndStart();
+                
+                // creating main client
+                var client = Clients.create();
+                
+                // creating temporary database (used for testing)
+                var root = Databases.at(client.link(server.rootNode())).create().root();
+                
+                var framework = {};
+               
+                
+                // load Micro App
+                var op = Apps.embed({
+                    app: client.link('https://objecthub.io/hub/users/main/~objecthub/home/my/~*0/it/.n/Pages/.n/Case_Studies/.n/Simple_Mobile_App/.n/I_like_ObjectHub', ''),
+                    wrappedApp: client.link('https://objecthub.io/undefined', ''),
+                    elem: $("[data-role='embed-app']"),
+                    framework: framework,
+                    parent: "noparent",
+                    root: root,
+                    server: server
+                });
+
+                op.catchExceptions(function(ex) {
+                    
+                    $("[data-role='embed-app']").append('<p>Error loading app: '+ex.exception+"</p>");
+                    $("[data-role='embed-app']").append(ex.stack);
+                      
+                });
+
+                op.get(function(app) {
+                   $("[data-role='splash']").hide();
+                   $("[data-role='embed-app']").show();
+                   
+                    // app successfully loaded   
+                }); 
+            };
+
+        </script>
+    </body>
+
+
+</html>
